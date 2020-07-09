@@ -1,6 +1,7 @@
 from flask import send_file, jsonify
 from flask.helpers import safe_join
-from CTFd.models import Challenges, Solves, db
+from CTFd.models import Challenges, Solves, Pages, db
+from CTFd.schemas.pages import PageSchema
 from CTFd.utils import get_config
 from CTFd.utils.modes import get_model
 from CTFd.utils.dates import ctf_ended, ctf_started
@@ -31,6 +32,17 @@ def load(app):
 				'is_verified': is_verified() or is_admin(),
 			},
 		})
+
+	@app.route("/api/v1/rules", methods=["GET"])
+	def rules():
+		page = Pages.query.filter_by(route='rules', auth_required=False).first_or_404()
+		schema = PageSchema()
+		response = schema.dump(page)
+
+		if response.errors:
+				return {"success": False, "errors": response.errors}, 400
+
+		return {"success": True, "data": response.data}
 
 	@app.route("/api/v1/challenges/solves", methods=["GET"])
 	@during_ctf_time_only
