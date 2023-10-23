@@ -1,0 +1,19 @@
+{
+  "name": "tsgctf-plugin",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .js,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.ts,.tsx --fix"
+  },
+  "author": "TSG",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.52.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-jquery": "^1.5.1",
+    "prettier": "^3.0.3"
+  }
+}
