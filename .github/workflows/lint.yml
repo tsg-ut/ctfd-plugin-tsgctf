@@ -1,0 +1,30 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Ptyhon Setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Poetry Setup
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: 1.6.1
+
+      - name: Lint
+        run: |
+          poetry install
+          poetry run black --check .
