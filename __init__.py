@@ -8,8 +8,13 @@ from CTFd.utils.dates import ctf_ended, ctf_started
 from CTFd.utils.user import is_verified, is_admin
 from CTFd.utils.decorators import during_ctf_time_only
 from sqlalchemy.sql import and_
+from .badge import onload as badge_onload, register_routes as badge_register_routes
 
 def load(app):
+	db.create_all()
+
+	badge_onload(app)
+
 	@app.route("/OneSignalSDKWorker.js", methods=["GET"])
 	def worker():
 		filename = safe_join(app.root_path, 'themes', 'tsgctf', 'static', 'OneSignalSDKWorker.js')
@@ -91,3 +96,5 @@ def load(app):
 
 		db.session.close()
 		return {"success": True, "data": response}
+
+	badge_register_routes(app)
