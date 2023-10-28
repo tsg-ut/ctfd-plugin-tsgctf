@@ -49,7 +49,7 @@ const doAddBadgeForm = ($form, defaultValue, submitCallback) => {
         Status badge endpoint. Leave empty to disable.
       </small>
     </label>
-    <input type="text" class="form-control" name="badge_url" value="${defaultValue}">
+    <input type="text" class="form-control tsgctf_badge_url" value="${defaultValue}">
   </div>
   `;
 
@@ -67,7 +67,7 @@ const addBadgeFormEntryNew = ($form) => {
     mutations.forEach(async (mutation) => {
       if (mutation.attributeName === 'value') {
         const challengeId = challengeIdInput.val();
-        const badgeUrl = $form.find('input[name="badge_url"]').val();
+        const badgeUrl = $form.find('input.tsgctf_badge_url').val();
         if (challengeId !== '') {
           const res = await submitBadge(challengeId, badgeUrl, "POST");
           if (res.status !== 200) {
@@ -110,7 +110,7 @@ const addBadgeFormEntryEdit = async ($form) => {
   const badgeUrl = res.badge_url;
 
   doAddBadgeForm($form, badgeUrl || '', async () => {
-    const newBadgeUrl = $('input[name="badge_url"]').val();
+    const newBadgeUrl = $('input.tsgctf_badge_url').val();
     const res = await submitBadge(challengeId, newBadgeUrl, "PATCH");
     if (res.status !== 200) {
       console.error(`Failed to submit badge: ${res.status}`);
