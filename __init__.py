@@ -1,5 +1,5 @@
 from flask import send_file, jsonify
-from flask.helpers import safe_join
+from werkzeug.utils import safe_join
 from CTFd.models import Challenges, Solves, Pages, db
 from CTFd.schemas.pages import PageSchema
 from CTFd.utils import get_config
