@@ -69,9 +69,7 @@ def load(app):
                     {
                         "success": False,
                         "data": None,
-                        "errors": {
-                            "type": "Missing or invalid ?type (team|user)"
-                        },
+                        "errors": {"type": "Missing or invalid ?type (team|user)"},
                     }
                 ),
                 400,
