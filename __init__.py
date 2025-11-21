@@ -1,8 +1,8 @@
 from flask import send_file, jsonify, request
 from werkzeug.utils import safe_join
-from CTFd.models import Challenges, Solves, Pages, db
-from CTFd.models import TeamFields, UserFields
+from CTFd.models import TeamFields, UserFields, Challenges, Solves, Pages, db
 from CTFd.schemas.pages import PageSchema
+from CTFd.schemas.fields import FieldSchema
 from CTFd.utils import get_config
 from CTFd.utils.modes import get_model
 from CTFd.utils.dates import ctf_ended, ctf_started
@@ -59,9 +59,9 @@ def load(app):
     def list_fields():
         t = (request.args.get("type") or "").lower()
 
-        if t in ("team", "teams"):
+        if t == "team":
             q = TeamFields.query
-        elif t in ("user", "users"):
+        elif t == "user":
             q = UserFields.query
         else:
             return (
@@ -77,19 +77,16 @@ def load(app):
 
         fields = q.all()
 
-        response = []
-        for f in fields:
-            response.append(
-                {
-                    "id": f.id,
-                    "name": getattr(f, "name", None),
-                    "field_type": getattr(f, "field_type", None),
-                    "description": getattr(f, "description", None),
-                    "required": bool(getattr(f, "required", False)),
-                }
-            )
+        schema = FieldSchema(
+            many=True,
+            only=("id", "name", "field_type", "description", "required"),
+        )
+        response = schema.dump(fields)
 
-        return jsonify({"success": True, "data": response})
+        if response.errors:
+            return {"success": False, "errors": response.errors}, 400
+
+        return jsonify({"success": True, "data": response.data})
 
     @app.route("/api/v1/challenges/solves", methods=["GET"])
     @during_ctf_time_only
