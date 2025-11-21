@@ -59,9 +59,9 @@ def load(app):
     def list_fields():
         t = (request.args.get("type") or "").lower()
 
-        if t == "team":
+        if t == "teams":
             q = TeamFields.query
-        elif t == "user":
+        elif t == "users":
             q = UserFields.query
         else:
             return (
