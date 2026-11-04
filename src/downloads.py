@@ -8,7 +8,6 @@ from CTFd.utils import get_config
 from CTFd.utils.challenges import get_solve_ids_for_user_id
 from CTFd.utils.config.visibility import challenges_visible
 from CTFd.utils.dates import ctf_ended, ctftime, view_after_ctf
-from CTFd.utils.modules import can_access_challenge
 from CTFd.utils.security.signing import (
     BadSignature,
     BadTimeSignature,
@@ -16,6 +15,16 @@ from CTFd.utils.security.signing import (
     unserialize,
 )
 from CTFd.utils.user import get_current_user
+
+
+def _can_access_challenge(challenge, user):
+    # Released CTFd 3.8.9 does not have module access or scheduled releases.
+    if not hasattr(Challenges, "module_id"):
+        return True
+
+    from CTFd.utils.modules import can_access_challenge
+
+    return can_access_challenge(challenge, user)
 
 
 def _get_download_user(file):
@@ -66,7 +75,7 @@ def load(app):
                     abort(404)
                 if not (ctftime() or (ctf_ended() and view_after_ctf())):
                     abort(403)
-                if not can_access_challenge(challenge, user):
+                if not _can_access_challenge(challenge, user):
                     abort(404)
                 if not _prerequisites_met(challenge, user):
                     abort(403)
@@ -90,7 +99,7 @@ def load(app):
             return
 
         challenge = file.challenge
-        if challenge.state != "visible" or not can_access_challenge(challenge, None):
+        if challenge.state != "visible" or not _can_access_challenge(challenge, None):
             return
         if not _prerequisites_met(challenge, None):
             return
