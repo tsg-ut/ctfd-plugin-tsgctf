@@ -6,9 +6,11 @@ from CTFd.utils.decorators import admins_only
 from .model import Badges
 
 
-def onload(app):
+def load(app):
+    db.create_all()
     register_plugin_assets_directory(app, base_path="/plugins/tsgctf/assets/")
     register_admin_script("/plugins/tsgctf/assets/badge.js")
+    register_routes(app)
 
 
 def register_routes(app):
