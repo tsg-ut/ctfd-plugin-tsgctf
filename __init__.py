@@ -1,8 +1,7 @@
-from .src import dates, downloads, onesignal, rules
+from .src import dates, downloads, rules
 
 
 def load(app):
     dates.load(app)
     downloads.load(app)
-    onesignal.load(app)
     rules.load(app)
