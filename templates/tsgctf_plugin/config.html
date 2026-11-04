@@ -1,0 +1,19 @@
+<form method="POST" autocomplete="off" class="w-100">
+    <div class="form-group">
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input"
+                   id="tsgctf_hide_new_teams" name="tsgctf_hide_new_teams"
+                   {% if tsgctf_hide_new_teams == True %}checked{% endif %}>
+            <label class="custom-control-label" for="tsgctf_hide_new_teams">
+                Hide newly registered teams
+            </label>
+        </div>
+        <small class="form-text text-muted">
+            Teams created through participant registration will be hidden from public
+            team lists, the scoreboard, and challenge solve counts. Existing teams and
+            teams created through the admin interface or imports are unaffected.
+            Administrators can make individual teams visible by clearing their Hidden flag.
+        </small>
+    </div>
+    <button type="submit" class="btn btn-md btn-primary float-right">Update</button>
+</form>
